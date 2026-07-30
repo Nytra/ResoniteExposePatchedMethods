@@ -4,6 +4,7 @@ using FrooxEngine;
 using System;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ExposePatchedMethods
 {
@@ -11,7 +12,7 @@ namespace ExposePatchedMethods
 	{
 		public override string Name => "ExposePatchedMethods";
 		public override string Author => "eia485, kazu0617, rampa3, Nytra";
-		public override string Version => "5.0.0";
+		public override string Version => "5.1.0";
 		public override string Link => "https://github.com/Nytra/ResoniteExposePatchedMethods";
 
 		#region config
