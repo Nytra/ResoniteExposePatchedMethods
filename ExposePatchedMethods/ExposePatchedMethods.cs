@@ -1,10 +1,10 @@
-using HarmonyLib;
-using ResoniteModLoader;
-using FrooxEngine;
-using System;
 using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
+
+using FrooxEngine;
+
+using HarmonyLib;
+
+using ResoniteModLoader;
 
 namespace ExposePatchedMethods;
 
@@ -56,7 +56,7 @@ public class ExposePatchedMethods : ResoniteMod
 		{
 			if (harmonyIds == null)
 			{
-				harmonyIds = new HashSet<string>();
+				harmonyIds = [];
 				foreach (MethodBase method in Harmony.GetAllPatchedMethods())
 				{
 					foreach (string owner in Harmony.GetPatchInfo(method).Owners)
@@ -83,11 +83,11 @@ public class ExposePatchedMethods : ResoniteMod
 	{
 		Config = GetConfiguration();
 
-		if (Config.GetValue(Key_HarmonyidsOnStart))
+		if (Key_HarmonyidsOnStart.Value)
 			_ = HarmonyIds;
 		Config.Save(true);
 
-		Harmony harmony = new Harmony("owo.Nytra.ExposePatchedMethods");
+		Harmony harmony = new("owo.Nytra.ExposePatchedMethods");
 		harmony.PatchAll();
 	}
 
@@ -98,8 +98,8 @@ public class ExposePatchedMethods : ResoniteMod
 		[HarmonyPatch(typeof(Userspace), "OnAttach")]
 		static void UserspaceOnAttachPostfix(Userspace __instance)
 		{
-			if (Config.GetValue(Key_ExposeUserspace)) GenList(__instance.World.RootSlot);
-			if (Config.GetValue(Key_UserSpaceModNamesMeta).HasValue) GenList(__instance.World.RootSlot, Config.GetValue(Key_UserSpaceModNamesMeta).Value);
+			if (Key_ExposeUserspace.Value) GenList(__instance.World.RootSlot);
+			if (Key_UserSpaceModNamesMeta.Value is not null) GenList(__instance.World.RootSlot, Key_UserSpaceModNamesMeta.Value.Value);
 		}
 
 		[HarmonyPostfix]
@@ -126,14 +126,14 @@ public class ExposePatchedMethods : ResoniteMod
 		slot.ChildAdded -= Slot_ChildAdded;
 		slot.RunInUpdates(1, () =>
 		{
-			if (Config.GetValue(Key_ExposeEverywhere)) GenList(slot);
-			if (Config.GetValue(Key_EverywhereModNamesMeta).HasValue) GenList(slot, Config.GetValue(Key_EverywhereModNamesMeta).Value);
+			if (Key_ExposeEverywhere.Value) GenList(slot);
+			if (Key_EverywhereModNamesMeta.Value is not null) GenList(slot, Key_EverywhereModNamesMeta.Value.Value);
 		});
 	}
 
 	static void GenList(Slot slot, NameMetadata metadata)
 	{
-		var list = slot.Children.FirstOrDefault(s=>s.Name == "Loaded mod names")
+		var list = slot.Children.FirstOrDefault(s => s.Name == "Loaded mod names")
 				?? slot.AddSlot("Loaded mod names", false);
 		foreach (ResoniteModBase mod in ModLoader.Mods())
 		{
