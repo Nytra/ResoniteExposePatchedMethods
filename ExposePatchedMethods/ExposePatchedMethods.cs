@@ -12,7 +12,7 @@ public class ExposePatchedMethods : ResoniteMod
 {
 	public override string Name => "ExposePatchedMethods";
 	public override string Author => "eia485, kazu0617, rampa3, Nytra";
-	public override string Version => "5.1.1";
+	public override string Version => "5.1.2";
 	public override string Link => "https://github.com/Nytra/ResoniteExposePatchedMethods";
 
 	#region config
